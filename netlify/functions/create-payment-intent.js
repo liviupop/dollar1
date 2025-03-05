@@ -30,6 +30,19 @@ exports.handler = async (event, context) => {
   }
 
   try {
+    // Check if Stripe API key is configured
+    if (!process.env.STRIPE_SECRET_KEY) {
+      console.error('Missing Stripe secret key');
+      return {
+        statusCode: 500,
+        headers,
+        body: JSON.stringify({ 
+          error: 'Stripe configuration missing',
+          details: 'STRIPE_SECRET_KEY environment variable is not set'
+        })
+      };
+    }
+
     const { amount, currency } = JSON.parse(event.body);
 
     // Create a payment intent with the order amount and currency
@@ -51,7 +64,11 @@ exports.handler = async (event, context) => {
     return {
       statusCode: 500,
       headers,
-      body: JSON.stringify({ error: 'Failed to create payment intent', details: error.message })
+      body: JSON.stringify({ 
+        error: 'Failed to create payment intent', 
+        details: error.message,
+        type: error.type
+      })
     };
   }
 };

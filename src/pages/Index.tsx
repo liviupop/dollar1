@@ -1,9 +1,10 @@
+
 import React, { useState } from 'react';
 import Header from '@/components/Header';
 import CoverLetterForm from '@/components/CoverLetterForm';
 import CoverLetterPreview from '@/components/CoverLetterPreview';
 import AIAssistant from '@/components/AIAssistant';
-import PaymentModal from '@/components/PaymentModal';
+import { PaymentModal } from '@/components/payment';
 import { GenerateCoverLetterParams, generateCoverLetter as geminiGenerateCoverLetter } from '@/lib/gemini';
 import { hasFreeGeneration, markFreeGenerationUsed } from '@/lib/stripe';
 import { useToast } from '@/components/ui/use-toast';
