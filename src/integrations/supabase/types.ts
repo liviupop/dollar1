@@ -9,7 +9,147 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      bonus_generations: {
+        Row: {
+          count: number | null
+          created_at: string | null
+          id: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          count?: number | null
+          created_at?: string | null
+          id?: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          count?: number | null
+          created_at?: string | null
+          id?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      feedback: {
+        Row: {
+          created_at: string | null
+          email: string
+          id: string
+          message: string
+        }
+        Insert: {
+          created_at?: string | null
+          email: string
+          id?: string
+          message: string
+        }
+        Update: {
+          created_at?: string | null
+          email?: string
+          id?: string
+          message?: string
+        }
+        Relationships: []
+      }
+      referrals: {
+        Row: {
+          created_at: string | null
+          id: string
+          referral_code: string
+          referrer_id: string
+          successful_referrals: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          referral_code: string
+          referrer_id: string
+          successful_referrals?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          referral_code?: string
+          referrer_id?: string
+          successful_referrals?: number | null
+        }
+        Relationships: []
+      }
+      referred_users: {
+        Row: {
+          created_at: string | null
+          id: string
+          referred_user_id: string
+          referrer_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          referred_user_id: string
+          referrer_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          referred_user_id?: string
+          referrer_id?: string
+        }
+        Relationships: []
+      }
+      user_stats: {
+        Row: {
+          browser: string | null
+          created_at: string | null
+          form_data: Json | null
+          generated_letter: string | null
+          generation_type: string | null
+          id: string
+          ip: string | null
+          language: string | null
+          location: string | null
+          operating_system: string | null
+          referral_code: string | null
+          screen_resolution: string | null
+          time_zone: string | null
+          user_agent: string | null
+        }
+        Insert: {
+          browser?: string | null
+          created_at?: string | null
+          form_data?: Json | null
+          generated_letter?: string | null
+          generation_type?: string | null
+          id?: string
+          ip?: string | null
+          language?: string | null
+          location?: string | null
+          operating_system?: string | null
+          referral_code?: string | null
+          screen_resolution?: string | null
+          time_zone?: string | null
+          user_agent?: string | null
+        }
+        Update: {
+          browser?: string | null
+          created_at?: string | null
+          form_data?: Json | null
+          generated_letter?: string | null
+          generation_type?: string | null
+          id?: string
+          ip?: string | null
+          language?: string | null
+          location?: string | null
+          operating_system?: string | null
+          referral_code?: string | null
+          screen_resolution?: string | null
+          time_zone?: string | null
+          user_agent?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

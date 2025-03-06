@@ -1,80 +1,25 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import Header from '@/components/Header';
 import CoverLetterForm from '@/components/CoverLetterForm';
 import CoverLetterPreview from '@/components/CoverLetterPreview';
 import AIAssistant from '@/components/AIAssistant';
 import { PaymentModal } from '@/components/payment';
-import { GenerateCoverLetterParams, generateCoverLetter as geminiGenerateCoverLetter } from '@/lib/gemini';
-import { hasFreeGeneration, markFreeGenerationUsed } from '@/lib/stripe';
-import { useToast } from '@/components/ui/use-toast';
-import { toast } from '@/components/ui/sonner';
 import { Helmet } from 'react-helmet';
+import { FeedbackButton } from '@/components/FeedbackDialog';
+import { useCoverLetter } from '@/hooks/use-cover-letter';
 
 const Index = () => {
-  const [coverLetterContent, setCoverLetterContent] = useState('');
-  const [isGenerating, setIsGenerating] = useState(false);
-  const [userName, setUserName] = useState('');
-  const [companyName, setCompanyName] = useState('');
-  const [showPaymentModal, setShowPaymentModal] = useState(false);
-  const [pendingParams, setPendingParams] = useState<GenerateCoverLetterParams | null>(null);
-  const { toast: toastOld } = useToast();
-
-  const handleGenerate = async (params: GenerateCoverLetterParams) => {
-    console.log("handleGenerate called with params:", params);
-    
-    // Add test bypass - if name is "testtest", skip payment
-    const isTestUser = params.name.toLowerCase() === "testtest";
-    
-    // Check if the user has a free generation available or is a test user
-    if (!hasFreeGeneration() && !isTestUser) {
-      setPendingParams(params);
-      setShowPaymentModal(true);
-      return;
-    }
-
-    // For test users, we don't count this as a free generation
-    await generateCoverLetterInternal(params, !isTestUser && hasFreeGeneration());
-  };
-
-  const generateCoverLetterInternal = async (params: GenerateCoverLetterParams, usesFreeGeneration: boolean) => {
-    console.log("generateCoverLetterInternal called with params:", params);
-    setIsGenerating(true);
-    setUserName(params.name);
-    setCompanyName(params.company);
-    setCoverLetterContent('');
-    
-    try {
-      console.log("Calling Gemini API...");
-      const generatedText = await geminiGenerateCoverLetter(params);
-      console.log("Received response from Gemini API");
-      
-      setCoverLetterContent(generatedText);
-      
-      if (generatedText.includes("Error")) {
-        toast.error("There was an error generating your cover letter. Please try again.");
-      } else {
-        toast.success("Your cover letter has been generated!");
-        
-        // Mark the free generation as used if this was a free generation
-        if (usesFreeGeneration) {
-          markFreeGenerationUsed();
-        }
-      }
-    } catch (error) {
-      console.error("Error in handleGenerate:", error);
-      toast.error("An unexpected error occurred. Please try again.");
-    } finally {
-      setIsGenerating(false);
-    }
-  };
-
-  const handlePaymentSuccess = async () => {
-    if (pendingParams) {
-      await generateCoverLetterInternal(pendingParams, false);
-      setPendingParams(null);
-    }
-  };
+  const {
+    coverLetterContent,
+    isGenerating,
+    userName,
+    companyName,
+    showPaymentModal,
+    setShowPaymentModal,
+    handleGenerate,
+    handlePaymentSuccess
+  } = useCoverLetter();
 
   return (
     <div className="min-h-screen bg-gradient-page">
@@ -114,7 +59,10 @@ const Index = () => {
         </main>
         
         <footer className="mt-12 mb-6 text-center text-sm text-muted-foreground">
-          <p>Powered by Secret AI</p>
+          <div className="flex flex-col items-center gap-2">
+            <p>Powered by Secret AI</p>
+            <FeedbackButton />
+          </div>
         </footer>
       </div>
       

@@ -9,7 +9,7 @@ const Header: React.FC = () => {
           <img 
             src="/lovable-uploads/bded7d7d-aa10-411d-a6c0-6eface5c7406.png" 
             alt="1 Dollar Cover Letter - First one for free" 
-            className="h-16 sm:h-20"
+            className="h-auto w-auto max-h-16 sm:max-h-20 object-contain"
           />
         </div>
         
